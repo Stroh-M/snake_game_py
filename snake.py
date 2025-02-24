@@ -2,6 +2,11 @@ import curses
 import time
 import random
 
+def get_random(height, width):
+    xr = random.randrange(width)
+    yr = random.randrange(height)
+    return yr, xr
+
 def main(stdcr):
     # clear the screen (terminal)
     stdcr.clear()
@@ -31,15 +36,21 @@ def main(stdcr):
     while True:
         # check if head of snake hit a wall 
         if snake[0][0] >= height or snake[0][1] >= width or snake[0][0] < 0 or snake[0][1] < 0:
-            print("Hit a wall. Game over")
-            quit()
+            stdcr.addstr(height // 2, width // 2, "Game over")
+            stdcr.addstr(height // 2 + 1, width // 2, f"You got {len(snake) - 1} food")
+            stdcr.nodelay(False)
+            stdcr.getch()
+            curses.wrapper(main)
         
         # check if head of snake hit into itself 
         for i in range(len(snake)):
             if i != 0:
                 if snake[0][0] == snake[i][0] and snake[0][1] == snake[i][1]:
-                    print("Bumped into yourself. Game over")
-                    quit()
+                    stdcr.addstr(height // 2, width // 2, " Game over")
+                    stdcr.addstr(height // 2 + 1, width // 2, f" You got {len(snake) - 1} food")
+                    stdcr.nodelay(False)
+                    stdcr.getch()
+                    curses.wrapper(main)
         
         # clear screen and enter # in every coordinates 
         stdcr.clear()
@@ -58,8 +69,11 @@ def main(stdcr):
         # check if food was eaten if and if yes reset the random numbers 
         # to put food in new cell and don't remove last # coordinates so snake grows
         if y == yrandom and x == xrandom:
-            yrandom = random.randrange(0, height)
-            xrandom = random.randrange(0, width)
+            randomNums = get_random(height, width)
+            # make sure new food not where snake is 
+            while randomNums in snake:
+                randomNums = get_random(height, width)
+            yrandom, xrandom = randomNums[0], randomNums[1]
         else: # if not pop out the last # coordinates so snake stays the same length
             snake.pop(-1)
         
