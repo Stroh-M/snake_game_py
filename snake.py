@@ -16,7 +16,6 @@ def main(stdcr):
     
     y = height // 2
     x = width // 2
-    snake = ["#"]
     
     snakePositions = [(y, x)]
     
@@ -24,7 +23,7 @@ def main(stdcr):
         
         stdcr.clear()
         for i in range(len(snakePositions)):
-            stdcr.addstr(snakePositions[i][0], snakePositions[i][1], snake[0])
+            stdcr.addstr(snakePositions[i][0], snakePositions[i][1], "#")
             pos = str(len(snakePositions))
             stdcr.addstr(0, 0, pos)
         stdcr.addstr(yrandom, xrandom, "*")
@@ -33,15 +32,14 @@ def main(stdcr):
         time.sleep(0.10)
         
         if y == yrandom and x == xrandom:
-            snake.insert(0, "#")
             yrandom = random.randrange(0, height)
             xrandom = random.randrange(0, width)
-        # snake.append("#")
+        else:
+            snakePositions.pop(-1)
         
         y += direction[0]
         x += direction[1]
         snakePositions.insert(0, (y, x))
-        # snakePositions.pop(-1)
         
         key = stdcr.getch()
         if key == curses.KEY_DOWN and direction != (-1, 0):
