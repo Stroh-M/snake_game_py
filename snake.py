@@ -6,7 +6,7 @@ def main(stdcr):
     stdcr.clear()
     curses.curs_set(0)
     stdcr.nodelay(True)
-    stdcr.border()
+    stdcr.border(1)
     
     height, width = stdcr.getmaxyx()
     direction = (0, 1)
@@ -21,19 +21,25 @@ def main(stdcr):
     
     while True:
         
+        if snakePositions[0][0] >= height or snakePositions[0][1] >= width:
+            print("Game over")
+            quit()
+        
+        
         stdcr.clear()
         for i in range(len(snakePositions)):
             stdcr.addstr(snakePositions[i][0], snakePositions[i][1], "#")
         stdcr.addstr(yrandom, xrandom, "*")
         stdcr.refresh()
-        
+
         time.sleep(0.10)
-        
+
         if y == yrandom and x == xrandom:
             yrandom = random.randrange(0, height)
             xrandom = random.randrange(0, width)
         else:
             snakePositions.pop(-1)
+        
         
         y += direction[0]
         x += direction[1]
@@ -50,6 +56,5 @@ def main(stdcr):
             direction = (0, -1)
             
         
-    
-    
+
 curses.wrapper(main)
