@@ -24,8 +24,6 @@ def main(stdcr):
         stdcr.clear()
         for i in range(len(snakePositions)):
             stdcr.addstr(snakePositions[i][0], snakePositions[i][1], "#")
-            pos = str(len(snakePositions))
-            stdcr.addstr(0, 0, pos)
         stdcr.addstr(yrandom, xrandom, "*")
         stdcr.refresh()
         
