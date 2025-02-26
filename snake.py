@@ -104,7 +104,7 @@ def main(stdcr):
             direction = (0, 1)
         elif key == curses.KEY_LEFT and direction != (0, 1):
             direction = (0, -1)
-        elif key == curses.KEY_END: # if button end is pressed program finishes
+        elif key == curses.KEY_END: # if end button is pressed program finishes
             quit()
 
 # run program 
