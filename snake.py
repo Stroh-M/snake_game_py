@@ -36,13 +36,15 @@ def main(stdcr):
     while True:
         # add a check for size of screen so when terminal resizes shouldn't ruin the game
         height, width = stdcr.getmaxyx()
-        
+
         # check if head of snake hit a wall 
         if snake[0][0] >= height or snake[0][1] >= width or snake[0][0] < 0 or snake[0][1] < 0:
             stdcr.addstr(height // 2, width // 2, "Game over")
             stdcr.addstr(height // 2 + 1, width // 2, f"You got {len(snake) - 1} food")
             stdcr.nodelay(False)
-            stdcr.getch()
+            key = stdcr.getch()
+            if key == curses.KEY_END:
+                break
             curses.wrapper(main)
         
         # check if head of snake hit into itself 
@@ -52,11 +54,16 @@ def main(stdcr):
                     stdcr.addstr(height // 2, width // 2, " Game over")
                     stdcr.addstr(height // 2 + 1, width // 2, f" You got {len(snake) - 1} food")
                     stdcr.nodelay(False)
-                    stdcr.getch()
+                    key = stdcr.getch()
+                    if key == curses.KEY_END:
+                        break
                     curses.wrapper(main)
         
         # clear screen and enter # in every coordinates 
         stdcr.clear()
+
+        # add current score on top row in middle
+        stdcr.addstr(0 ,width // 2, f"{len(snake) - 1}")
         for i in range(len(snake)):
             stdcr.addstr(snake[i][0], snake[i][1], "#")
 
@@ -74,7 +81,7 @@ def main(stdcr):
         if y == yrandom and x == xrandom:
             randomNums = get_random(height, width)
             # make sure new food not where snake is 
-            while randomNums in snake:
+            while randomNums in snake or randomNums == (0, width // 2):
                 randomNums = get_random(height, width)
             yrandom, xrandom = randomNums[0], randomNums[1]
         else: # if not pop out the last # coordinates so snake stays the same length
