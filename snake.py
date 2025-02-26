@@ -34,6 +34,9 @@ def main(stdcr):
     
     # make the snake move and get bigger as it eats (play game)
     while True:
+        # add a check for size of screen so when terminal resizes shouldn't ruin the game
+        height, width = stdcr.getmaxyx()
+        
         # check if head of snake hit a wall 
         if snake[0][0] >= height or snake[0][1] >= width or snake[0][0] < 0 or snake[0][1] < 0:
             stdcr.addstr(height // 2, width // 2, "Game over")
